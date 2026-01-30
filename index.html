@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abd-Alrahman Alsahy | Data Scientist</title>
+    <style>
+        :root {
+            --bg-color: #0d1117; /* GitHub Dark Mode Background */
+            --text-color: #c9d1d9;
+            --accent-color: #58a6ff; /* GitHub Blue */
+            --card-bg: #161b22;
+            --border-color: #30363d;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+        
+        /* Hero Section */
+        header { text-align: center; padding: 60px 20px; border-bottom: 1px solid var(--border-color); }
+        h1 { font-size: 2.5rem; margin-bottom: 10px; color: #ffffff; }
+        .subtitle { font-size: 1.2rem; color: #8b949e; margin-bottom: 30px; }
+        .btn {
+            display: inline-block;
+            background-color: var(--accent-color);
+            color: #ffffff;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+            margin: 5px;
+        }
+        .btn-outline { background-color: transparent; border: 1px solid var(--border-color); color: var(--accent-color); }
+
+        /* Sections */
+        section { padding: 50px 0; border-bottom: 1px solid var(--border-color); }
+        h2 { color: #ffffff; border-left: 4px solid var(--accent-color); padding-left: 15px; margin-bottom: 30px; }
+        
+        /* Grid for Projects */
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 20px;
+            transition: transform 0.2s;
+        }
+        .card:hover { transform: translateY(-5px); border-color: var(--accent-color); }
+        .card h3 { margin-top: 0; color: var(--accent-color); }
+        .tech-stack { font-size: 0.85rem; color: #8b949e; margin-top: 10px; font-family: monospace; }
+
+        /* Impact List */
+        ul.impact-list { list-style: none; padding: 0; }
+        ul.impact-list li { margin-bottom: 15px; padding-left: 25px; position: relative; }
+        ul.impact-list li::before { content: "⚡"; position: absolute; left: 0; }
+
+        /* Footer */
+        footer { text-align: center; padding: 40px; color: #8b949e; font-size: 0.9rem; }
+        a { color: var(--accent-color); text-decoration: none; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    
+    <header>
+        <h1>Abd-Alrahman Alsahy</h1>
+        <p class="subtitle">Data Scientist | ECPC Finalist | Builder</p>
+        <p>I bridge the gap between complex algorithms and real-world business insights.<br>Currently serving in the Egyptian Armed Forces. Open to work <b>Dec 1, 2026</b>.</p>
+        <br>
+        <a href="#projects" class="btn">View Projects</a>
+        <a href="https://github.com/Alsahy" class="btn btn-outline">GitHub Profile</a>
+    </header>
+
+    <section id="about">
+        <h2>Beyond the Code</h2>
+        <p>I am a Computer Engineering graduate from Tanta University who loves "solving puzzles"—whether that’s optimizing a Genetic Algorithm or uncovering hidden trends in a messy dataset.</p>
+        <p>As a <b>Community Leader</b> for the ICPC Tanta Community, I learned that technology is useless without communication. That’s why I don’t just write code; I speak, teach, and create content to help others navigate the intersection of <b>Technology and Life Awareness</b>.</p>
+    </section>
+
+    <section id="projects">
+        <h2>Featured Projects</h2>
+        <div class="grid">
+            <div class="card">
+                <h3>Qaddemly AI</h3>
+                <p>An AI platform using BERT & CrewAI to automate resume parsing and candidate matching for smarter hiring.</p>
+                <div class="tech-stack">Python • Transformers • Groq</div>
+            </div>
+            <div class="card">
+                <h3>Android Market Analysis</h3>
+                <p>Exploratory Data Analysis (EDA) on 10,000+ apps to uncover trends in pricing and user ratings.</p>
+                <div class="tech-stack">Pandas • Plotly • Seaborn</div>
+            </div>
+            <div class="card">
+                <h3>Insurance Prediction</h3>
+                <p>A logistic regression model that identifies financial risk with precision using feature-wise evaluation.</p>
+                <div class="tech-stack">Scikit-Learn • Statsmodels</div>
+            </div>
+            <div class="card">
+                <h3>TSP Genetic Algorithm</h3>
+                <p>Solved the Traveling Salesman Problem using Genetic Algorithms, demonstrating algorithmic efficiency.</p>
+                <div class="tech-stack">Python • Heuristic Search</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="impact">
+        <h2>Impact & Speaking</h2>
+        <ul class="impact-list">
+            <li><b>Speaker @ AI Insider:</b> Hosted as a technical speaker to discuss the future of AI and Competitive Programming.</li>
+            <li><b>1st Place, Youth Challenge:</b> Awarded 1st place at the Governorate level for technical innovation.</li>
+            <li><b>ECPC Finalist:</b> Ranked 145th out of 385 teams in the Egyptian Collegiate Programming Contest Finals.</li>
+        </ul>
+    </section>
+
+    <section id="youtube">
+        <h2>Algorithms for Code & Life</h2>
+        <p>On my YouTube channel, I share tutorials on Competitive Programming alongside discussions on mindfulness and character building.</p>
+        <a href="https://www.youtube.com/@Abd_Alrahman_Alsahy" class="btn btn-outline">Visit Channel</a>
+    </section>
+
+    <footer>
+        <p>© 2026 Abd-Alrahman Alsahy. Built with 💻 and ☕ in Cairo, Egypt.</p>
+        <p>
+            <a href="https://www.linkedin.com/in/abd-alrahman-alsahy-47a990258/">LinkedIn</a> • 
+            <a href="mailto:a.elsahy14@gmail.com">Email</a>
+        </p>
+    </footer>
+
+</div>
+
+</body>
+</html>
