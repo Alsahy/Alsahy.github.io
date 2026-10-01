@@ -79,6 +79,9 @@
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start; }
         .grid-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; }
 
+        /* Fallback offset if JS is disabled (anchor jump) */
+        #story { scroll-margin-top: 90px; }
+
         /* --- Hero --- */
         .hero { min-height: 90vh; display: flex; flex-direction: column; justify-content: center; text-align: center; }
         .hero h1 { 
@@ -114,6 +117,113 @@
             border-color: var(--accent-blue);
         }
 
+        /* --- CLICKABLE TITLE LINKS --- */
+        .title-link {
+            color: inherit;
+            text-decoration: none;
+            background-image: linear-gradient(currentColor, currentColor);
+            background-size: 0% 2px;
+            background-position: 0 100%;
+            background-repeat: no-repeat;
+            transition: background-size 0.35s ease, color 0.3s ease;
+            padding-bottom: 2px;
+        }
+        .title-link::after {
+            content: " ↗";
+            font-family: 'Inter', sans-serif;
+            font-size: 0.6em;
+            opacity: 0.55;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            display: inline-block;
+        }
+        .title-link:hover, .title-link:focus-visible { background-size: 100% 2px; }
+        .title-link:hover::after, .title-link:focus-visible::after { opacity: 1; transform: translate(2px, -2px); }
+        .title-link:focus-visible { outline: 2px solid var(--accent-blue); outline-offset: 4px; border-radius: 4px; }
+
+
+        /* Make a whole card clickable through its title link */
+        .title-link.stretched::before { content: ""; position: absolute; inset: 0; z-index: 3; border-radius: 20px; }
+        .card.is-link { cursor: pointer; }
+        .card.is-link:hover { border-color: rgba(139, 92, 246, 0.55); box-shadow: 0 10px 40px rgba(139, 92, 246, 0.18); }
+
+        /* --- CERTIFICATIONS SCENE --- */
+        .cert-scene {
+            position: relative; padding: 28px; border-radius: 22px; overflow: hidden;
+            background:
+                radial-gradient(circle at 15% 0%, rgba(251, 191, 36, 0.14), transparent 55%),
+                radial-gradient(circle at 100% 100%, rgba(139, 92, 246, 0.18), transparent 55%),
+                var(--card-glass);
+            border: 1px solid rgba(251, 191, 36, 0.28);
+            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255,255,255,0.08);
+        }
+        .cert-scene::before {
+            content: ""; position: absolute; top: -60px; right: -60px; width: 180px; height: 180px; border-radius: 50%;
+            background: conic-gradient(from 0deg, transparent, rgba(251,191,36,0.35), transparent 40%);
+            filter: blur(14px); animation: certSpin 8s linear infinite; pointer-events: none;
+        }
+        @keyframes certSpin { to { transform: rotate(360deg); } }
+        .cert-head { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; position: relative; z-index: 1; }
+        .cert-trophy {
+            width: 52px; height: 52px; border-radius: 16px; display: grid; place-items: center; font-size: 1.6rem; flex-shrink: 0;
+            background: linear-gradient(135deg, rgba(251,191,36,0.25), rgba(139,92,246,0.25));
+            border: 1px solid rgba(251,191,36,0.45); box-shadow: 0 0 25px rgba(251,191,36,0.25);
+        }
+        .cert-head h3 { font-size: 1.5rem; margin: 0; line-height: 1.2; }
+        .cert-head small { display: block; color: var(--text-secondary); font-size: 0.8rem; letter-spacing: 1px; text-transform: uppercase; font-family: 'Inter', sans-serif; }
+        .cert-list { display: grid; gap: 12px; position: relative; z-index: 1; }
+        .cert-item {
+            display: flex; align-items: center; gap: 14px; padding: 14px 16px; border-radius: 14px; text-decoration: none; color: inherit;
+            background: rgba(255,255,255,0.04); border: 1px solid var(--border-glass);
+            transition: transform 0.3s ease, border-color 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+        }
+        .cert-item:hover, .cert-item:focus-visible {
+            transform: translateX(6px); background: rgba(255,255,255,0.08);
+            border-color: rgba(251,191,36,0.6); box-shadow: 0 8px 28px rgba(251,191,36,0.12);
+        }
+        .cert-item:focus-visible { outline: 2px solid var(--accent-blue); outline-offset: 3px; }
+        .cert-icon { width: 42px; height: 42px; border-radius: 12px; display: grid; place-items: center; font-size: 1.2rem; flex-shrink: 0; }
+        .cert-icon.dc { background: rgba(3, 239, 98, 0.12); border: 1px solid rgba(3, 239, 98, 0.4); }
+        .cert-icon.ds { background: rgba(59, 130, 246, 0.14); border: 1px solid rgba(59, 130, 246, 0.45); }
+        .cert-text { flex: 1; min-width: 0; }
+        .cert-text strong { display: block; font-size: 0.98rem; color: #fff; line-height: 1.3; }
+        .cert-text span { font-size: 0.8rem; color: var(--text-secondary); }
+        .cert-arrow { color: var(--accent-gold); font-size: 1.1rem; opacity: 0.6; transition: transform 0.3s ease, opacity 0.3s ease; }
+        .cert-item:hover .cert-arrow { opacity: 1; transform: translate(3px, -3px); }
+
+
+        /* --- IMAGE ZOOM (hover preview + click lightbox) --- */
+        img.zoomable { cursor: zoom-in; }
+        /* keep logos above the stretched card link so they can be zoomed */
+        .card.is-link img { position: relative; z-index: 4; }
+
+        #zoom-dim {
+            position: fixed; inset: 0; z-index: 9998; background: rgba(0, 0, 0, 0.62);
+            opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+            backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px);
+        }
+        #zoom-preview {
+            position: fixed; top: 50%; left: 50%; z-index: 9999;
+            max-width: min(88vw, 1100px); max-height: 86vh;
+            transform: translate(-50%, -50%) scale(0.92);
+            opacity: 0; pointer-events: none;
+            border-radius: 18px; border: 1px solid rgba(255,255,255,0.18);
+            box-shadow: 0 25px 90px rgba(0,0,0,0.7), 0 0 60px rgba(59,130,246,0.25);
+            background: #0b0b12; object-fit: contain;
+            transition: opacity 0.3s ease, transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        #zoom-dim.show { opacity: 1; }
+        #zoom-preview.show { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        /* click-to-open mode (works on touch too) */
+        #zoom-dim.locked { pointer-events: auto; cursor: zoom-out; }
+        #zoom-preview.locked { pointer-events: auto; cursor: zoom-out; }
+        #zoom-hint {
+            position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%); z-index: 10000;
+            color: #fff; font-size: 0.8rem; background: rgba(0,0,0,0.6); padding: 6px 16px; border-radius: 50px;
+            border: 1px solid rgba(255,255,255,0.15); opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+        }
+        #zoom-hint.show { opacity: 1; }
+
         /* --- GLASS CARDS --- */
         .card {
             background: var(--card-glass);
@@ -133,6 +243,7 @@
             content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
             background: linear-gradient(to right, transparent, rgba(255,255,255,0.05), transparent);
             transform: skewX(-25deg); transition: 0.5s;
+            pointer-events: none;
         }
         .card:hover::after { left: 150%; }
         
@@ -180,6 +291,20 @@
         .timeline-content:hover { border-color: var(--accent-gold); }
         .timeline-img { width: 100%; height: 200px; object-fit: cover; border-radius: 10px; margin-top: 15px; border: 1px solid rgba(255,255,255,0.1); }
 
+        /* Highlighted timeline entry (ECPC 2026 coaching) */
+        .timeline-content.highlight {
+            border-color: rgba(251, 191, 36, 0.5);
+            background: linear-gradient(145deg, rgba(251, 191, 36, 0.08), var(--card-glass));
+            box-shadow: 0 0 40px rgba(251, 191, 36, 0.08);
+        }
+        .badge-row { display: flex; gap: 10px; margin: 15px 0 5px; flex-wrap: wrap; }
+        .timeline-item:nth-child(odd) .badge-row { justify-content: flex-end; }
+        .badge {
+            background: rgba(251, 191, 36, 0.12); border: 1px solid rgba(251, 191, 36, 0.4);
+            color: var(--accent-gold); padding: 6px 14px; border-radius: 50px;
+            font-size: 0.8rem; font-weight: 600; line-height: 1.4;
+        }
+
         /* --- Gallery Row --- */
         .gallery-row { display: flex; gap: 10px; overflow-x: auto; margin-top: 15px; padding-bottom: 5px; scrollbar-width: none; }
         .gallery-row img { height: 110px; width: 160px; object-fit: cover; border-radius: 8px; flex-shrink: 0; border: 1px solid var(--border-glass); transition: 0.3s; cursor: pointer; }
@@ -198,16 +323,21 @@
             .timeline::after { left: 31px; }
             .timeline-item { width: 100%; padding-left: 70px; padding-right: 25px; }
             .timeline-item:nth-child(odd), .timeline-item:nth-child(even) { left: 0; text-align: left; }
+            .timeline-item:nth-child(odd) .badge-row { justify-content: flex-start; }
             .timeline-dot { left: 20px; }
             .timeline-item:nth-child(even) .timeline-dot { left: 20px; }
             .hero h1 { font-size: 3.5rem; }
             .grid-2 { grid-template-columns: 1fr; }
+            #story { scroll-margin-top: 40px; }
         }
     </style>
 </head>
 <body>
 
     <canvas id="canvas-bg"></canvas>
+    <div id="zoom-dim"></div>
+    <img id="zoom-preview" alt="">
+    <div id="zoom-hint">Click anywhere or press Esc to close</div>
     <div id="lightning-flash"></div>
     <div class="ambient-light light-1"></div>
     <div class="ambient-light light-2"></div>
@@ -217,12 +347,14 @@
         <h1>Abd-Alrahman Alsahy</h1>
         <p>Data Scientist & <span style="color: var(--accent-blue); font-style: italic;">Storyteller</span>. <br>I build systems that bridge algorithms and life.</p>
         <div style="margin-top: 30px;">
-            <a href="#projects" class="btn">Explore My Journey</a>
+            <!-- FIX: now targets #story (the "Passion First" image + text) instead of #projects -->
+            <a href="#story" class="btn">Explore My Journey</a>
         </div>
     </section>
 
     <section class="section-padding container">
-        <div class="grid-2">
+        <!-- id="story" = scroll target for "Explore My Journey" -->
+        <div class="grid-2" id="story">
             <div class="card" style="padding: 10px; border: none; background: transparent; box-shadow: none; backdrop-filter: none;">
                 <img src="images/profile.jpg" alt="Alsahy" style="height: 480px; border-radius: 20px; box-shadow: 0 0 50px rgba(59, 130, 246, 0.2); border: 1px solid rgba(255,255,255,0.1);">
             </div>
@@ -250,7 +382,7 @@
             
             <div class="card">
                 <img src="images/qaddemly.jpg" alt="Qaddemly">
-                <h3>Qaddemly AI Platform</h3>
+                <h3><a class="title-link" href="https://github.com/Qaddemly" target="_blank" rel="noopener noreferrer">Qaddemly AI Platform</a></h3>
                 <p style="color: var(--accent-gold); font-size: 0.85rem; font-weight: bold; letter-spacing: 1px;">GRADUATION PROJECT</p>
                 <p style="color: #ccc; margin-top: 10px;">Served as the AI Specialist. I optimized the core matching logic to ensure fairness.</p>
                 <ul class="detail-list">
@@ -262,7 +394,7 @@
 
             <div class="card">
                 <img src="images/sleep.jpg" alt="Sleep Dashboard">
-                <h3>Sleep & Lifestyle</h3>
+                <h3><a class="title-link" href="https://github.com/Alsahy/sleep_and_lifestyle_dashboard" target="_blank" rel="noopener noreferrer">Sleep & Lifestyle</a></h3>
                 <p style="color: var(--accent-gold); font-size: 0.85rem; font-weight: bold; letter-spacing: 1px;">DATA RESEARCH</p>
                 <p style="color: #ccc; margin-top: 10px;">Keenly curious about how jobs affect sleep, I researched circadian rhythms and collected real-world data.</p>
                 <ul class="detail-list">
@@ -274,7 +406,7 @@
 
             <div class="card">
                 <img src="images/tsp.jpg" alt="TSP Algorithm">
-                <h3>TSP Genetic Algorithm</h3>
+                <h3><a class="title-link" href="https://github.com/Alsahy/TSP-GA" target="_blank" rel="noopener noreferrer">TSP Genetic Algorithm</a></h3>
                 <p style="color: var(--accent-gold); font-size: 0.85rem; font-weight: bold; letter-spacing: 1px;">ALGORITHMIC DESIGN</p>
                 <p style="color: #ccc; margin-top: 10px;">Built a random city and population from scratch to solve the NP-Hard "Traveling Salesman Problem."</p>
                 <ul class="detail-list">
@@ -286,7 +418,7 @@
 
             <div class="card">
                 <img src="images/android.jpg" alt="Android Analysis">
-                <h3>Android Market EDA</h3>
+                <h3><a class="title-link" href="https://github.com/Alsahy" target="_blank" rel="noopener noreferrer">Android Market EDA</a></h3>
                 <p style="color: var(--accent-gold); font-size: 0.85rem; font-weight: bold; letter-spacing: 1px;">MARKET ANALYSIS</p>
                 <p style="color: #ccc; margin-top: 10px;">An in-depth Exploratory Data Analysis of 10,000+ apps to find hidden success metrics.</p>
                 <ul class="detail-list">
@@ -309,7 +441,7 @@
                     <h3 style="color: var(--accent-blue);">The Spark</h3>
                     <p style="color: #ccc; margin-bottom: 10px; font-size: 0.9rem;">1st Participation</p>
                     <p>I entered with little knowledge but left with massive inspiration. We placed <b>35th</b> in qualifications. It was a failure to qualify, but a success in ignition.</p>
-                    <img src="images/ecpc1.jpg" class="timeline-img">
+                    <img src="images/ecpc1.jpg" class="timeline-img" alt="ECPC first participation">
                 </div>
             </div>
 
@@ -319,7 +451,7 @@
                     <h3 style="color: var(--accent-gold);">The Comeback</h3>
                     <p style="color: #ccc; margin-bottom: 10px; font-size: 0.9rem;">Finalist (Rank 146)</p>
                     <p>I persuaded my team to try again. We fought through a tough day, ranked <b>22nd</b>, and reached the Finals. We battled 400 teams and secured <b>146th place</b>.</p>
-                    <img src="images/ecpc2.jpg" class="timeline-img">
+                    <img src="images/ecpc2.jpg" class="timeline-img" alt="ECPC finals">
                 </div>
             </div>
 
@@ -329,7 +461,22 @@
                     <h3 style="color: var(--accent-purple);">The Coach</h3>
                     <p style="color: #ccc; margin-bottom: 10px; font-size: 0.9rem;">Mentorship Era</p>
                     <p>I transitioned to coaching. I taught two teams not just algorithms, but the <b>mindset</b>. My proudest achievement? They eventually got better than me.</p>
-                    <img src="images/ecpc3.jpg" class="timeline-img">
+                    <img src="images/ecpc3.jpg" class="timeline-img" alt="Coaching ECPC teams">
+                </div>
+            </div>
+
+            <!-- NEW: ECPC 2026 coaching achievement -->
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content highlight">
+                    <h3 style="color: var(--accent-gold);">ECPC 2026: Coaching from the Barracks</h3>
+                    <p style="color: #ccc; margin-bottom: 10px; font-size: 0.9rem;">Coach • During Military Service</p>
+                    <p>While serving in the Armed Forces, I coached <b>7 teams</b> in ECPC 2026, and <b>3 of them reached the ECPC Finals</b>. Proof that the mindset we built together travels anywhere.</p>
+                    <div class="badge-row">
+                        <span class="badge">7 Teams Coached</span>
+                        <span class="badge">3 Reached the Finals</span>
+                    </div>
+                    <img src="images/ecpc2026.jpg" class="timeline-img" alt="ECPC 2026 coached teams reaching the Finals">
                 </div>
             </div>
 
@@ -358,25 +505,42 @@
                 <h2>Internships & Learning</h2>
                 <div style="display: flex; flex-direction: column; gap: 20px; margin-top: 30px;">
                     
-                    <div class="card" style="padding: 20px; display: flex; gap: 20px; align-items: center;">
+                    <div class="card is-link" style="padding: 20px; display: flex; gap: 20px; align-items: center;">
                         <img src="images/shai.jpg" style="width: 80px; height: 80px; margin: 0; object-fit: contain; background: #fff; padding: 5px; border-radius: 8px;">
                         <div>
-                            <h3 style="font-size: 1.2rem; margin: 0;">SHAI For AI</h3>
+                            <h3 style="font-size: 1.2rem; margin: 0;"><a class="title-link stretched" href="https://www.linkedin.com/company/shaiforai/posts/?feedView=all" target="_blank" rel="noopener noreferrer">SHAI For AI</a></h3>
                             <p style="font-size: 0.85rem;">Ensemble Learning & AI Principles.</p>
                         </div>
                     </div>
 
-                    <div class="card" style="padding: 20px; display: flex; gap: 20px; align-items: center;">
+                    <div class="card is-link" style="padding: 20px; display: flex; gap: 20px; align-items: center;">
                         <img src="images/klatch.jpg" style="width: 80px; height: 80px; margin: 0; object-fit: contain; background: #fff; padding: 5px; border-radius: 8px;">
                         <div>
-                            <h3 style="font-size: 1.2rem; margin: 0;">Klatch.ai</h3>
+                            <h3 style="font-size: 1.2rem; margin: 0;"><a class="title-link stretched" href="https://drive.google.com/file/d/1SLIatoSrKl4hgUWfjNfj2z6UpP8dFiJO/view?usp=sharing" target="_blank" rel="noopener noreferrer">Klatch.ai</a></h3>
                             <p style="font-size: 0.85rem;">Computer Vision & Neural Networks.</p>
                         </div>
                     </div>
 
-                    <div class="card" style="padding: 20px;">
-                        <h3 style="font-size: 1.2rem; margin-bottom: 5px;">Certifications</h3>
-                        <p style="font-size: 0.9rem; color: var(--accent-blue);">DataCamp Data Science Track • Data Science 365</p>
+                    <div class="cert-scene">
+                        <div class="cert-head">
+                            <div class="cert-trophy">🎓</div>
+                            <div>
+                                <small>Verified Learning</small>
+                                <h3><a class="title-link" href="https://linkedin.com/in/abd-alrahman-alsahy-47a990258" target="_blank" rel="noopener noreferrer">Certifications</a></h3>
+                            </div>
+                        </div>
+                        <div class="cert-list">
+                            <a class="cert-item" href="https://drive.google.com/drive/folders/1x2il-XMrUk41iD_Wh3CJFFOzgP4PyR1o" target="_blank" rel="noopener noreferrer">
+                                <div class="cert-icon dc">📊</div>
+                                <div class="cert-text"><strong>DataCamp Data Science Track</strong><span>Python • Pandas • Machine Learning</span></div>
+                                <div class="cert-arrow">↗</div>
+                            </a>
+                            <a class="cert-item" href="https://drive.google.com/drive/folders/1c1yJS6hoftBQVsxABPIJLfGsM_7gox_0" target="_blank" rel="noopener noreferrer">
+                                <div class="cert-icon ds">🧠</div>
+                                <div class="cert-text"><strong>Data Science 365</strong><span>Statistics • SQL • Data Storytelling</span></div>
+                                <div class="cert-arrow">↗</div>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -388,8 +552,8 @@
         
         <div class="grid-2">
             <div class="card">
-                <h3 style="color: var(--accent-blue);">Ma3an Handasa</h3>
-                <p style="color: #ccc; margin-bottom: 15px; font-weight: bold;">HR Member & Leader (2022 - Present)</p>
+                <h3 style="color: var(--accent-blue);"><a class="title-link" href="https://www.facebook.com/Ma3anHandsa" target="_blank" rel="noopener noreferrer">Ma3an Handasa</a></h3>
+                <p style="color: #ccc; margin-bottom: 15px; font-weight: bold;">HR Member & Leader</p>
                 <p style="font-size: 0.95rem;">I focused on systemization and data-driven management.</p>
                 <ul class="detail-list">
                     <li><b>HR Leader</b> for 4 Major Events.</li>
@@ -404,7 +568,7 @@
             </div>
 
             <div class="card">
-                <h3 style="color: var(--accent-purple);">ICPC Tanta Community</h3>
+                <h3 style="color: var(--accent-purple);"><a class="title-link" href="https://www.facebook.com/acm.tanta.community" target="_blank" rel="noopener noreferrer">ICPC Tanta Community</a></h3>
                 <p style="color: #ccc; margin-bottom: 15px; font-weight: bold;">Community Leader & HR Lead</p>
                 <p style="font-size: 0.95rem;">Transformed the community into a structured organization.</p>
                 <ul class="detail-list">
@@ -539,6 +703,119 @@
             setTimeout(triggerLightning, nextFlash);
         }
         setTimeout(triggerLightning, 3000);
+
+        // --- 4. SMOOTH SCROLL TO SECTIONS ---
+        // Eased scroll that lands exactly on the target (e.g. "Passion First")
+        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        let scrollRAF = null;
+
+        function easeInOutCubic(t) {
+            return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+        }
+
+        function smoothScrollTo(target) {
+            const offset = window.innerWidth <= 768 ? 40 : 90;   // breathing room above the section
+            const startY = window.scrollY;
+            const maxY = document.documentElement.scrollHeight - window.innerHeight;
+            const endY = Math.min(Math.max(target.getBoundingClientRect().top + startY - offset, 0), maxY);
+            const distance = endY - startY;
+
+            if (reduceMotion || Math.abs(distance) < 2) {
+                window.scrollTo(0, endY);
+                return;
+            }
+
+            const duration = Math.min(1600, Math.max(900, Math.abs(distance) * 0.6));
+            const startTime = performance.now();
+            if (scrollRAF) cancelAnimationFrame(scrollRAF);
+
+            function step(now) {
+                const progress = Math.min((now - startTime) / duration, 1);
+                window.scrollTo(0, startY + distance * easeInOutCubic(progress));
+                if (progress < 1) scrollRAF = requestAnimationFrame(step);
+                else scrollRAF = null;
+            }
+            scrollRAF = requestAnimationFrame(step);
+        }
+
+        // Let the user interrupt the animation by scrolling manually
+        ['wheel', 'touchstart', 'keydown'].forEach(evt =>
+            window.addEventListener(evt, () => {
+                if (scrollRAF) { cancelAnimationFrame(scrollRAF); scrollRAF = null; }
+            }, { passive: true })
+        );
+
+        document.querySelectorAll('a[href^="#"]').forEach(link => {
+            link.addEventListener('click', (e) => {
+                const hash = link.getAttribute('href');
+                if (hash === '#') { e.preventDefault(); return; }   // placeholder links do nothing yet
+                const target = document.querySelector(hash);
+                if (!target) return;
+                e.preventDefault();
+                smoothScrollTo(target);
+                history.pushState(null, '', hash);
+            });
+        });
+
+
+        // --- 5. IMAGE ZOOM: hover to enlarge, click to lock open ---
+        (function () {
+            const dim = document.getElementById('zoom-dim');
+            const big = document.getElementById('zoom-preview');
+            const hint = document.getElementById('zoom-hint');
+            const canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+            let hoverTimer = null;
+            let locked = false;
+
+            const images = Array.from(document.querySelectorAll('img')).filter(i => i.id !== 'zoom-preview');
+            images.forEach(img => img.classList.add('zoomable'));
+
+            function isBroken(img) { return img.complete && img.naturalWidth === 0; }
+
+            function openZoom(img) {
+                if (isBroken(img)) return;
+                big.src = img.currentSrc || img.src;
+                big.alt = img.alt || '';
+                dim.classList.add('show');
+                big.classList.add('show');
+            }
+            function closeZoom() {
+                dim.classList.remove('show', 'locked');
+                big.classList.remove('show', 'locked');
+                hint.classList.remove('show');
+                locked = false;
+            }
+
+            images.forEach(img => {
+                if (canHover) {
+                    img.addEventListener('mouseenter', () => {
+                        if (locked) return;
+                        clearTimeout(hoverTimer);
+                        hoverTimer = setTimeout(() => openZoom(img), 180);   // small delay avoids accidental flashes
+                    });
+                    img.addEventListener('mouseleave', () => {
+                        clearTimeout(hoverTimer);
+                        if (!locked) closeZoom();
+                    });
+                }
+                // Click / tap: open (and keep open) in a larger view
+                img.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    clearTimeout(hoverTimer);
+                    openZoom(img);
+                    locked = true;
+                    dim.classList.add('locked');
+                    big.classList.add('locked');
+                    hint.classList.add('show');
+                });
+            });
+
+            dim.addEventListener('click', closeZoom);
+            big.addEventListener('click', closeZoom);
+            window.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeZoom(); });
+            window.addEventListener('scroll', () => { if (!locked) closeZoom(); }, { passive: true });
+        })();
 
     </script>
 </body>
